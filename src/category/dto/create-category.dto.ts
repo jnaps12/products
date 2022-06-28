@@ -1,4 +1,9 @@
+import { IsNotEmpty, Length } from 'class-validator';
+
 export class CreateCategoryDto {
+  @IsNotEmpty()
   name: string;
-  description: string;
+
+  @Length(5, 255)
+  description?: string;
 }
