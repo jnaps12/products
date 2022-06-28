@@ -11,24 +11,35 @@ export class CategoryService {
     private categoryRepository: Repository<Category>,
   ) {}
 
-  // create(createCategoryDto: CreateCategoryDto) {
-  //   return 'This action adds a new category';
-  // }
-
-  async findAll(): Promise<Category[]> {
-    return this.categoryRepository.find();
-
+  async create(createCategoryDto: CreateCategoryDto) {
+    const category = await this.categoryRepository.save(createCategoryDto);
+    return category;
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} category`;
-  // }
+  async findAll(): Promise<Category[]> {
+    return await this.categoryRepository.find();
+  }
 
-  // update(id: number, updateCategoryDto: UpdateCategoryDto) {
-  //   return `This action updates a #${id} category`;
-  // }
+  async findOne(id: number) {
+    const category = await this.categoryRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} category`;
-  // }
+    if (!category) {
+      throw Error(`This category is not created.`);
+    }
+    return category;
+  }
+
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    await this.categoryRepository.update(id, updateCategoryDto);
+    return `Category #${id} updated succefully.`;
+  }
+
+  async remove(id: number) {
+    await this.categoryRepository.delete(id);
+    return `Category #${id} removed succefully.`;
+  }
 }
