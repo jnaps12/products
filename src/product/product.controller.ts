@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { NotFoundException } from '@nestjs/common';
 
 @Controller('product')
 export class ProductController {
@@ -9,7 +18,9 @@ export class ProductController {
 
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+    return this.productService.create(createProductDto).catch((error) => {
+      throw new NotFoundException(error.message);
+    });
   }
 
   @Get()
@@ -19,16 +30,22 @@ export class ProductController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
+    return this.productService.findOne(+id).catch((error) => {
+      throw new NotFoundException(error.message);
+    });
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+    return this.productService.update(+id, updateProductDto).catch((error) => {
+      throw new NotFoundException(error.message);
+    });
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+    return this.productService.remove(+id).catch((error) => {
+      throw new NotFoundException(error.message);
+    });
   }
 }

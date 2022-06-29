@@ -10,6 +10,7 @@ import {
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { NotFoundException } from '@nestjs/common';
 
 @Controller('category')
 export class CategoryController {
@@ -27,7 +28,9 @@ export class CategoryController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(+id);
+    return this.categoryService.findOne(+id).catch((error) => {
+      throw new NotFoundException(error.message);
+    });
   }
 
   @Patch(':id')
