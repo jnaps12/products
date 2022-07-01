@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
-import { Category } from 'src/category/entities/category.entity';
+import { Category } from 'src/modules/category/entities/category.entity';
 
 @Exclude()
 export class CreateProductDto {
