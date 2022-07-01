@@ -1,5 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
-import { IsNotEmpty, Length } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 @Exclude()
 export class CreateCategoryDto {
@@ -8,6 +8,6 @@ export class CreateCategoryDto {
   name: string;
 
   @Expose()
-  @Length(5, 255)
+  @IsOptional()
   description?: string;
 }

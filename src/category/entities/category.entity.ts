@@ -10,7 +10,7 @@ export class Category {
   name: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  description: string;
+  description?: string;
 
   @OneToMany(() => Product, (product) => product.category, {
     cascade: true,
