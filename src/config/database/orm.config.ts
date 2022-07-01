@@ -1,11 +1,13 @@
 import { DataSource } from 'typeorm';
+import 'dotenv/config';
+import { ConfigService } from '@nestjs/config';
 
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
     useFactory: async () => {
       const dataSource = new DataSource({
-        type: 'mysql',
+        type: process.env.DB_CONNECTION,
         host: 'localhost',
         port: 3306,
         username: 'root',
