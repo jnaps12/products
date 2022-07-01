@@ -16,22 +16,22 @@ export class Product {
   name: string;
 
   @Column()
-  qt_stock: number;
+  qtStock: number;
 
   @Column('decimal', { precision: 5, scale: 2 })
-  cost_value: number;
+  costValue: number;
 
   @Column('decimal', { precision: 5, scale: 2, nullable: true })
-  sale_value: number;
+  saleValue: number;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  bar_code: string;
+  barCode: string;
 
   @Column({ type: 'text', nullable: true })
   description: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  product_code: string;
+  productCode: string;
 
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
@@ -40,12 +40,12 @@ export class Product {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  created_at: Date;
+  createdAt: Date;
 
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
-  updated_at: Date;
+  updatedAt: Date;
 }
