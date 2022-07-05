@@ -3,6 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
+import { NotFoundException } from '../common/notfound.exception';
 
 @Injectable()
 export class ProductService {
@@ -13,6 +14,7 @@ export class ProductService {
 
   async create(createProductDto: CreateProductDto) {
     const product = await this.productRepository.save(createProductDto);
+    console.log(product);
     return product;
   }
 
@@ -28,27 +30,26 @@ export class ProductService {
     });
 
     if (!product) {
-      throw Error(`Product #${id} not found.`);
+      throw new NotFoundException('Product', id);
     }
-
     return product;
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
     const product = await this.productRepository.findOne({ where: { id } });
     if (!product) {
-      throw Error(`Product #${id} not found.`);
+      throw new NotFoundException('Product', id);
     }
     await this.productRepository.update({ id }, updateProductDto);
-    return `Product #${id} updated succefully.`;
+    return product;
   }
 
   async remove(id: number) {
     const product = await this.productRepository.findOne({ where: { id } });
     if (!product) {
-      throw Error(`Product #${id} not found.`);
+      throw new NotFoundException('Product', id);
     }
     await this.productRepository.delete(id);
-    return `Product #${id} removed succefully.`;
+    return product;
   }
 }
