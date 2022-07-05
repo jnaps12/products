@@ -3,6 +3,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
+import { NotFoundException } from '../common/notfound.exception';
 
 @Injectable()
 export class CategoryService {
@@ -28,18 +29,30 @@ export class CategoryService {
     });
 
     if (!category) {
-      throw Error(`This category is not created.`);
+      throw new NotFoundException('Category', id);
     }
     return category;
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    await this.categoryRepository.update(id, updateCategoryDto);
-    return `Category #${id} updated succefully.`;
+    const category = await this.categoryRepository.findOne({
+      where: { id },
+    });
+    if (!category) {
+      throw new NotFoundException('Category', id);
+    }
+    await this.categoryRepository.update({ id }, updateCategoryDto);
+    return category;
   }
 
   async remove(id: number) {
-    await this.categoryRepository.delete(id);
-    return `Category #${id} removed succefully.`;
+    const category = await this.categoryRepository.findOne({
+      where: { id },
+    });
+    if (!category) {
+      throw new NotFoundException('Category', id);
+    }
+    await this.categoryRepository.delete(category);
+    return category;
   }
 }
