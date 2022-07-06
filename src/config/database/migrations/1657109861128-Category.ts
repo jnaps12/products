@@ -1,4 +1,5 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { idColumn } from '../utils/columns';
 
 export class Category1657109861128 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -6,12 +7,7 @@ export class Category1657109861128 implements MigrationInterface {
       new Table({
         name: 'category',
         columns: [
-          {
-            name: 'id',
-            type: 'int',
-            isPrimary: true,
-            isGenerated: true,
-          },
+          idColumn,
           {
             name: 'name',
             type: 'varchar',
