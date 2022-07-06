@@ -11,23 +11,23 @@ export class CreateProductDto {
 
   @Expose()
   @IsNotEmpty()
-  qt_stock: number;
+  qtStock: number;
 
   @Expose()
   @IsNotEmpty()
   // @IsDecimal({ force_decimal: false, decimal_digits: '1, ', locale: 'pt-BR' })
-  cost_value: number;
+  costValue: number;
 
   @Expose()
   @Min(0)
   @IsOptional()
   // @IsDecimal({ force_decimal: false, decimal_digits: '1, ', locale: 'pt-BR' })
-  sale_value?: number;
+  saleValue?: number;
 
   @Expose()
   @IsString()
   @IsOptional()
-  bar_code?: string;
+  barCode?: string;
 
   @Expose()
   @IsString()
@@ -37,7 +37,7 @@ export class CreateProductDto {
   @Expose()
   @IsString()
   @IsOptional()
-  product_code?: string;
+  productCode?: string;
 
   @Expose()
   @IsNotEmpty()

@@ -13,7 +13,9 @@ export const databaseProviders = [
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
         entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
-        synchronize: Boolean(process.env.DB_SYNCHRONIZE),
+        synchronize: false,
+        migrations: ['src/db/migrations/*.{.ts, .js}'],
+        migrationsRun: true,
       });
 
       return dataSource.initialize();
