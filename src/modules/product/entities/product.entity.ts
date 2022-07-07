@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -15,30 +16,40 @@ export class Product {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ name: 'qt_stock' })
   qtStock: number;
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('decimal', { name: 'cost_value' })
   costValue: number;
 
-  @Column('decimal', { precision: 5, scale: 2, nullable: true })
+  @Column('decimal', {
+    nullable: true,
+    name: 'sale_value',
+  })
   saleValue: number;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'bar_code' })
   barCode: string;
 
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    name: 'product_code',
+  })
   productCode: string;
 
   @ManyToOne(() => Category, (category) => category.products)
+  @JoinColumn({ name: 'category_fk' })
   category: Category;
 
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
+    name: 'created_at',
   })
   createdAt: Date;
 
@@ -46,6 +57,7 @@ export class Product {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
+    name: 'updated_at',
   })
   updatedAt: Date;
 }

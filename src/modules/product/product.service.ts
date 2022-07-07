@@ -4,17 +4,28 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '../common/notfound.exception';
+import { Category } from '../category/entities/category.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @Inject('PRODUCT_REPOSITORY')
     private productRepository: Repository<Product>,
+
+    @Inject('CATEGORY_REPOSITORY')
+    private categoryRepository: Repository<Category>,
   ) {}
 
   async create(createProductDto: CreateProductDto) {
+    const category = await this.categoryRepository.findOne({
+      where: { id: +createProductDto.category },
+    });
+
+    if (!category) {
+      throw new NotFoundException('Category', +createProductDto.category);
+    }
+
     const product = await this.productRepository.save(createProductDto);
-    console.log(product);
     return product;
   }
 
@@ -28,7 +39,6 @@ export class ProductService {
         id: id,
       },
     });
-
     if (!product) {
       throw new NotFoundException('Product', id);
     }
@@ -40,8 +50,17 @@ export class ProductService {
     if (!product) {
       throw new NotFoundException('Product', id);
     }
+
+    const category = await this.categoryRepository.findOne({
+      where: { id: +updateProductDto.category },
+    });
+
+    if (!category) {
+      throw new NotFoundException('Category', +updateProductDto.category);
+    }
+
     await this.productRepository.update({ id }, updateProductDto);
-    return product;
+    return this.findOne(id);
   }
 
   async remove(id: number) {

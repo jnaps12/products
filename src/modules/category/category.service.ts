@@ -42,7 +42,7 @@ export class CategoryService {
       throw new NotFoundException('Category', id);
     }
     await this.categoryRepository.update({ id }, updateCategoryDto);
-    return category;
+    return this.findOne(id);
   }
 
   async remove(id: number) {
