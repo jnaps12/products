@@ -16,4 +16,11 @@ export class Category {
     cascade: true,
   })
   products: Product[];
+
+  constructor(category?: Partial<Category>) {
+    this.id = category?.id;
+    this.name = category?.name;
+    this.description = category?.description;
+    this.products = category?.products;
+  }
 }
