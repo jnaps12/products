@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
 import { Category } from './entities/category.entity';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 const categoryEntityList: Category[] = [
   new Category({
@@ -23,6 +25,17 @@ const categoryEntityList: Category[] = [
     products: [],
   }),
 ];
+
+const newCategoryEntity = new Category({
+  name: 'New controler',
+  description: 'New category description',
+});
+
+const updatedCategoryEntity = new Category({
+  name: 'category 1 ',
+  description: 'category 1 updated',
+});
+
 describe('CategoryController', () => {
   let categoryController: CategoryController;
   let categoryService: CategoryService;
@@ -34,11 +47,11 @@ describe('CategoryController', () => {
         {
           provide: CategoryService,
           useValue: {
-            create: jest.fn(),
+            create: jest.fn().mockResolvedValue(newCategoryEntity),
             findAll: jest.fn().mockResolvedValue(categoryEntityList),
-            findOne: jest.fn(),
-            update: jest.fn(),
-            remove: jest.fn(),
+            findOne: jest.fn().mockResolvedValue(categoryEntityList[0]),
+            update: jest.fn().mockResolvedValue(updatedCategoryEntity),
+            remove: jest.fn().mockResolvedValue(categoryEntityList[0]),
           },
         },
       ],
@@ -65,8 +78,82 @@ describe('CategoryController', () => {
     // it('should throw an exception', () => {
     //   jest.spyOn(categoryService, 'findAll').mockRejectedValueOnce(new Error());
 
-    //   //asset
+    //   //assert
     //   expect(categoryController.findAll).rejects.toThrowError();
     // });
+  });
+
+  describe('create', () => {
+    it('Should create a new category successfully', async () => {
+      const body: CreateCategoryDto = {
+        name: 'New category',
+        description: 'New category description',
+      };
+      const result = await categoryController.create(body);
+
+      expect(result).toEqual(newCategoryEntity);
+    });
+
+    it('should throw an exception', () => {
+      const body: CreateCategoryDto = {
+        name: 'New category',
+        description: 'New category description',
+      };
+
+      jest.spyOn(categoryService, 'create').mockRejectedValueOnce(new Error());
+
+      expect(categoryController.create(body)).rejects.toThrowError();
+    });
+  });
+
+  describe('findOne', () => {
+    it('Should get a category Entity correctly', async () => {
+      const result = await categoryController.findOne('1');
+
+      expect(result).toEqual(categoryEntityList[0]);
+    });
+
+    it('should throw an exception', () => {
+      jest.spyOn(categoryService, 'findOne').mockRejectedValueOnce(new Error());
+
+      expect(categoryController.findOne('1')).rejects.toThrowError();
+    });
+  });
+
+  describe('update', () => {
+    it('should update a category successfully', async () => {
+      const body: UpdateCategoryDto = {
+        name: 'category 1 ',
+        description: 'category 1 updated',
+      };
+      const result = await categoryController.update('1', body);
+
+      expect(result).toEqual(updatedCategoryEntity);
+    });
+
+    it('should throw an exception', () => {
+      const body: UpdateCategoryDto = {
+        name: 'category 1 ',
+        description: 'category 1 updated',
+      };
+
+      jest.spyOn(categoryService, 'update').mockRejectedValueOnce(new Error());
+
+      expect(categoryController.update('1', body)).rejects.toThrowError();
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove a category successfully', async () => {
+      const result = await categoryController.remove('1');
+
+      expect(result).toEqual(categoryEntityList[0]);
+    });
+
+    it('should throw an exception', () => {
+      jest.spyOn(categoryService, 'remove').mockRejectedValueOnce(new Error());
+
+      expect(categoryController.remove('1')).rejects.toThrowError();
+    });
   });
 });
