@@ -60,4 +60,18 @@ export class Product {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  constructor(product?: Partial<Product>) {
+    this.id = product?.id;
+    this.name = product?.name;
+    this.qtStock = product?.qtStock;
+    this.costValue = product?.costValue;
+    this.saleValue = product?.saleValue;
+    this.barCode = product?.barCode;
+    this.description = product?.description;
+    this.productCode = product?.productCode;
+    this.category = product?.category;
+    this.createdAt = product?.createdAt;
+    this.updatedAt = product?.updatedAt;
+  }
 }

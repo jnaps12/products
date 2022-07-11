@@ -47,8 +47,8 @@ describe('CategoryController', () => {
         {
           provide: CategoryService,
           useValue: {
-            create: jest.fn().mockResolvedValue(newCategoryEntity),
             findAll: jest.fn().mockResolvedValue(categoryEntityList),
+            create: jest.fn().mockResolvedValue(newCategoryEntity),
             findOne: jest.fn().mockResolvedValue(categoryEntityList[0]),
             update: jest.fn().mockResolvedValue(updatedCategoryEntity),
             remove: jest.fn().mockResolvedValue(categoryEntityList[0]),
