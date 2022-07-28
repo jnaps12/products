@@ -1,28 +1,29 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '../common/notfound.exception';
 import { Category } from '../category/entities/category.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProductService {
   constructor(
-    @Inject('PRODUCT_REPOSITORY')
+    @InjectRepository(Product)
     private productRepository: Repository<Product>,
 
-    @Inject('CATEGORY_REPOSITORY')
+    @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
   ) {}
 
   async create(createProductDto: CreateProductDto) {
     const category = await this.categoryRepository.findOne({
-      where: { id: +createProductDto.category },
+      where: { id: +createProductDto.categoryId },
     });
 
     if (!category) {
-      throw new NotFoundException('Category', +createProductDto.category);
+      throw new NotFoundException('Category', +createProductDto.categoryId);
     }
 
     const product = await this.productRepository.save(createProductDto);
@@ -52,11 +53,14 @@ export class ProductService {
     }
 
     const category = await this.categoryRepository.findOne({
-      where: { id: +updateProductDto.category },
+      where: { id: Number(updateProductDto.categoryId) },
     });
 
     if (!category) {
-      throw new NotFoundException('Category', +updateProductDto.category);
+      throw new NotFoundException(
+        'Category',
+        Number(updateProductDto.categoryId),
+      );
     }
 
     await this.productRepository.update({ id }, updateProductDto);

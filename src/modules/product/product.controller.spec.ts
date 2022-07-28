@@ -16,11 +16,7 @@ const productEntityList: Product[] = [
     barCode: '42318741',
     description: 'product teste',
     productCode: '94jlj32j4',
-    category: new Category({
-      id: 1,
-      name: 'category teste',
-      description: 'teste',
-    }),
+    categoryId: 1,
     createdAt: new Date(),
     updatedAt: new Date(),
   }),
@@ -33,11 +29,7 @@ const productEntityList: Product[] = [
     barCode: '42313128741',
     description: 'product teste',
     productCode: '94jlj32j4',
-    category: new Category({
-      id: 1,
-      name: 'category teste',
-      description: 'teste',
-    }),
+    categoryId: 2,
     createdAt: new Date(),
     updatedAt: new Date(),
   }),
@@ -51,11 +43,7 @@ const newProductEntity = new Product({
   barCode: '42318741',
   description: 'product teste',
   productCode: '94jlj32j4',
-  category: new Category({
-    id: 1,
-    name: 'category teste',
-    description: 'teste',
-  }),
+  categoryId: 3,
 });
 
 const updatedProductEntity = new Product({
@@ -120,12 +108,7 @@ describe('ProductController', () => {
       barCode: '32143253534234',
       description: 'teste',
       productCode: 'PVI1050',
-      category: new Category({
-        id: 1,
-        name: 'category teste',
-        description: 'teste',
-        products: [],
-      }),
+      categoryId: 1,
     };
     it('Should create a new product successfully', async () => {
       const result = await productController.create(body);
@@ -162,11 +145,7 @@ describe('ProductController', () => {
       barCode: '42318741',
       description: 'product teste updated',
       productCode: '94jlj32j4',
-      category: new Category({
-        id: 1,
-        name: 'category teste',
-        description: 'teste',
-      }),
+      categoryId: 1,
     };
     it('Should updated a product entity successfully', async () => {
       const result = await productController.update('1', body);

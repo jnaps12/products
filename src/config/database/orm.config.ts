@@ -1,8 +1,8 @@
-import { DataSource } from 'typeorm';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import 'dotenv/config';
 import { join } from 'path';
 
-const dataSource = new DataSource({
+export const dbConfig = {
   type: 'mysql',
   host: process.env.DB_HOST,
   port: +process.env.DB_PORT,
@@ -11,14 +11,7 @@ const dataSource = new DataSource({
   database: process.env.DB_DATABASE,
   entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
   synchronize: false,
-  migrations: [join(__dirname, './migrations/**/*{.ts,.js}')],
-});
-
-export const databaseProviders = [
-  {
-    provide: 'DATA_SOURCE',
-    useFactory: async () => dataSource.initialize(),
-  },
-];
-
-export default dataSource;
+  migrations: [
+    join(__dirname, './../../config/database/migrations/**/*{.ts,.js}'),
+  ],
+} as TypeOrmModuleOptions;

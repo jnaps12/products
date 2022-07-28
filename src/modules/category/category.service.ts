@@ -1,14 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
 import { NotFoundException } from '../common/notfound.exception';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CategoryService {
   constructor(
-    @Inject('CATEGORY_REPOSITORY')
+    @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
   ) {}
 
@@ -48,11 +49,12 @@ export class CategoryService {
   async remove(id: number) {
     const category = await this.categoryRepository.findOne({
       where: { id },
+      relations: ['products'],
     });
     if (!category) {
       throw new NotFoundException('Category', id);
     }
-    await this.categoryRepository.delete(category);
+    await this.categoryRepository.remove(category);
     return category;
   }
 }

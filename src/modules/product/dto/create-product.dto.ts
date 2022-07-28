@@ -1,6 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
 import { IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
-import { Category } from '../../category/entities/category.entity';
 
 @Exclude()
 export class CreateProductDto {
@@ -41,5 +40,5 @@ export class CreateProductDto {
 
   @Expose()
   @IsNotEmpty()
-  category: Category;
+  categoryId: number;
 }

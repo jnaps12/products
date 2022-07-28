@@ -42,6 +42,9 @@ export class Product {
   })
   productCode: string;
 
+  @Column({ name: 'category_fk' })
+  categoryId: number;
+
   @ManyToOne(() => Category, (category) => category.products)
   @JoinColumn({ name: 'category_fk' })
   category: Category;
@@ -70,7 +73,7 @@ export class Product {
     this.barCode = product?.barCode;
     this.description = product?.description;
     this.productCode = product?.productCode;
-    this.category = product?.category;
+    this.categoryId = product?.categoryId;
     this.createdAt = product?.createdAt;
     this.updatedAt = product?.updatedAt;
   }
