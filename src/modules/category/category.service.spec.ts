@@ -4,6 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 const categoryEntityList: Category[] = [
   new Category({ name: 'task 1', description: 'task 1' }),
@@ -14,6 +15,11 @@ const categoryEntityList: Category[] = [
 const data: CreateCategoryDto = {
   name: 'task 1',
   description: 'task 1',
+};
+
+const updatedCategory: UpdateCategoryDto = {
+  name: 'task 1 updated',
+  description: 'task 1 updated',
 };
 
 describe('CategoryService', () => {
@@ -30,8 +36,8 @@ describe('CategoryService', () => {
             save: jest.fn().mockResolvedValue(categoryEntityList[0]),
             find: jest.fn().mockResolvedValue(categoryEntityList),
             findOne: jest.fn().mockResolvedValue(categoryEntityList[0]),
-            update: jest.fn(),
-            delete: jest.fn(),
+            update: jest.fn().mockResolvedValue(categoryEntityList[0]),
+            remove: jest.fn().mockResolvedValue(categoryEntityList[0]),
           },
         },
       ],
@@ -88,10 +94,44 @@ describe('CategoryService', () => {
       expect(categoryRepository.save).toHaveBeenCalledTimes(1);
     });
 
-    it('Shoudl throw an exception', () => {
+    it('Should throw an exception', () => {
       jest.spyOn(categoryRepository, 'save').mockRejectedValueOnce(new Error());
 
       expect(categoryService.create(data)).rejects.toThrowError();
+    });
+  });
+
+  describe('update', () => {
+    it('Should update a Category entity successsfully', async () => {
+      const result = await categoryService.update(1, updatedCategory);
+
+      expect(result).toEqual(categoryEntityList[0]);
+      expect(categoryRepository.update).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should throw an exception', () => {
+      jest
+        .spyOn(categoryRepository, 'update')
+        .mockRejectedValueOnce(new Error());
+
+      expect(categoryService.update(1, updatedCategory)).rejects.toThrowError();
+    });
+  });
+
+  describe('remove', () => {
+    it('Should remove a Category entity successfully', async () => {
+      const result = await categoryService.remove(1);
+
+      expect(result).toEqual(categoryEntityList[0]);
+      expect(categoryRepository.remove).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should throw an exception', () => {
+      jest
+        .spyOn(categoryRepository, 'remove')
+        .mockRejectedValueOnce(new Error());
+
+      expect(categoryService.remove(1)).rejects.toThrowError();
     });
   });
 });

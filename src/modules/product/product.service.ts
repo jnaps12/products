@@ -72,7 +72,7 @@ export class ProductService {
     if (!product) {
       throw new NotFoundException('Product', id);
     }
-    await this.productRepository.delete(id);
+    await this.productRepository.remove(product);
     return product;
   }
 }
