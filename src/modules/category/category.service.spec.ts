@@ -102,7 +102,7 @@ describe('CategoryService', () => {
   });
 
   describe('update', () => {
-    it('Should update a Category entity successsfully', async () => {
+    it('Should update a Category entity successfully', async () => {
       const result = await categoryService.update(1, updatedCategory);
 
       expect(result).toEqual(categoryEntityList[0]);
