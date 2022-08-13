@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { join } from 'path';
 
 export const dbConfig = {
-  type: 'mysql',
+  type: 'mariadb',
   host: process.env.DB_HOST,
   port: +process.env.DB_PORT,
   username: process.env.DB_USERNAME,
